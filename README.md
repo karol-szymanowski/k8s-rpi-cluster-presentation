@@ -1,7 +1,7 @@
 # High availability K8S cluster on raspberry pi
 Created by [Karol Szymanowski](https://www.linkedin.com/in/karol-sz/)
 
-![Cluster image](media/images/cluster.png)
+![Cluster image](media/images/cluster.jpg)
 
 Presentation in which I explain how I built a high-availability kubernetes cluster using several raspberry pi computers.
 The length of the full presentation is planned for 1.5 hours.
