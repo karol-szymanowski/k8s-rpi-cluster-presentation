@@ -1,0 +1,809 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop"></section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>High availability kubernetes cluster on Raspberry Pi</h3>
+							<p>by Karol Szymanowski</p>
+						</div>
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="position: absolute; width: 50%; left: -10%; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+							<h2>Agenda</h2>
+							<ol>
+								<li>Essentials: raspberry PI, storage, power supply...</li>
+								<li>Setting up Raspberry Pi</li>
+								<li>Installing Kubernetes</li>
+								<li>Building perfect k8s system</li>
+								<li>Development and deployment to the kubernetes</li>
+								<li>Summary</li>
+							</ol>
+						</div>
+					</section>
+				</section>
+				<section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h1>Essentials</h1>
+							<p>Picking right equipment</p>
+						</div>
+					</section>
+					<section>
+						<h3>Raspberry pi</h3>
+						<img class="fragment" src="media/images/rpi-1.jpg" style="height: 200px; position: absolute; left: -10%; top: 10%">
+						<p class="fragment highlight-red">Raspberry pi 1 model A/A+/B</p>
+						<img class="fragment" src="media/images/rpi-zero.webp" style="height: 200px; position: absolute; right: -10%; top: 0%">
+						<p class="fragment highlight-red">Raspberry pi zero</p>
+						<p class="fragment highlight-red">Raspberry 2 model B</p>
+						<img class="fragment" src="media/images/rpi-3.jpg"style="height: 200px; position: absolute; left: -10%; top: 50%">
+						<p class="fragment highlight-red">Raspberry 3 model A+</p>
+						<p class="fragment highlight-green">Raspberry 3 model B/B+</p>
+						<img class="fragment" src="media/images/rpi-4.jpg" style="height: 200px; position: absolute; right: -15%; top: 35%">
+						<p class="fragment highlight-green grow">Raspberry 4 model B</p>
+						<img class="fragment" src="media/images/rpi-cm.png" style="height: 100px; position: absolute; right: -10%; top: 70%">
+						<p class="fragment highlight-red">Raspberry Compute Module model 1</p>
+						<p class="fragment highlight-green">Raspberry CM model 3/3+/3 lite/3+ lite</p>
+
+						<aside class="notes">
+							<iframe src="https://en.wikipedia.org/wiki/Raspberry_Pi" frameborder="0" width="100%" height="650px"></iframe>
+						</aside>
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Power Supply</h3>
+						</div>
+						<img src="media/images/power-supply-4.png" style="height: 200px">
+						<img src="media/images/power-supply-2.png" style="height: 200px">
+						<img src="media/images/power-supply-3.png" style="height: 200px">
+						<img class="fragment grow" src="media/images/power-supply-1.png" style="height: 200px">
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Storage</h3>
+						</div>
+						<img src="media/images/storage-1.jpg" style="height: 200px">
+						<img class="fragment" src="media/images/storage-2.jpg" style="height: 200px">
+						<img class="fragment" src="media/images/storage-3.jpg" style="height: 200px">
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Networking</h3>
+						</div>
+						<img class="fragment grow" src="media/images/network.webp" style="height: 200px">
+						<img src="media/images/network-2.jpg" style="height: 200px">
+						<img src="media/images/network-3.jpg" style="height: 200px">
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-2.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Other...</h3>
+						</div>
+						<img src="media/images/cluster-case.jpg" style="height: 200px">
+						<p class="fragment">
+							<img src="media/images/computer-fans.png" style="height: 200px">
+							<img src="media/images/heatsink.jpg" style="height: 200px">
+						</p>
+					</section>
+				</section>
+				<section>
+					<section data-background-video="media/videos/raspberry-pi-sample-1.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px">
+							<h2>Setting up Raspberry Pi</h2>
+							<p>Configuring cluster with Ansible</p>
+						</div>
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-1.mp4" data-background-video-loop="loop">
+						<img src="media/images/balena-etcher.png" height="592" width="912"/>
+					</section>
+					<section>
+						<img src="media/images/pick-os.png"/>
+					</section>
+					<section>
+						<h3>Initial setup</h3>
+						<pre><code class="yaml" data-line-numbers="0">---
+- hosts: all
+  remote_user: "{{ default_username }}"
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Create target user (Raspbian/Debian)
+      user:
+        name: "{{ username }}"
+        password: "{{ password | password_hash('sha512') }}"
+        groups:
+          - sudo
+          - users
+    - name: Copy pub key to new user
+      authorized_key:
+        user: "{{ username }}"
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    - name: Disable Password Authentication
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: "PasswordAuthentication no"
+        state: present
+        backup: yes
+    - name: Update system
+      apt:
+        cache_valid_time: 3600
+        update_cache: yes
+        upgrade: safe
+    - name: Change hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+      notify: Reboot
+
+  handlers:
+    - name: Reboot
+      reboot:
+
+- hosts: all
+  remote_user: "{{ username }}"
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name  : Kill all "{{ default_username }}" user's processes
+      shell : "sudo pkill -u {{ default_username }}"
+    - name: Remove default account
+      user:
+        name: "{{ default_username }}"
+        remove: yes
+        state: absent
+
+						</code></pre>
+					</section>
+					<section>
+						<h3>Setting up data center</h3>
+						<pre><code class="yaml" data-line-numbers="0">---
+- hosts: all
+  remote_user: "{{ username }}"
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Update system
+      apt:
+        cache_valid_time: 3600
+        update_cache: yes
+        upgrade: safe
+    - name: Install dependencies
+      apt:
+        pkg:
+          - fail2ban
+          - ufw
+          - libpq-dev
+          - python-psycopg2
+
+---
+
+- hosts: database_rpi_master
+  remote_user: "{{ username }}"
+  become: true
+  gather_facts: true
+  vars:
+    db_password: "{{ lookup('password', 'postgres-password chars=ascii_letters length=30') }}"
+
+  tasks:
+
+  roles:
+    - role: geerlingguy.postgresql
+      become: true
+      vars:
+        postgresql_databases:
+          - name: "{{ k3s_db }}"
+            lc_collate: 'en_GB.UTF-8'
+            lc_ctype: 'en_GB.UTF-8'
+        postgresql_users:
+          - name: "{{ k3s_db_user }}"
+            password: "{{ db_password }}"
+        postgresql_locales:
+          - 'en_GB.UTF-8'
+        postgres_users_no_log: false
+        postgresql_global_config_options:
+           - option: listen_addresses
+             value: '*'
+        postgresql_hba_entries:
+          - {type: local, database: all, user: postgres, auth_method: peer}
+          - {type: local, database: all, user: all, auth_method: peer}
+          - {type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5}
+          - {type: host, database: all, user: all, address: '::1/128', auth_method: md5}
+          - {type: host, database: "{{ k3s_db }}", user: "{{ k3s_db_user }}", address: '192.168.0.1/24', auth_method: md5}
+
+- hosts: nfs_rpi
+  remote_user: "{{ username }}"
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: geerlingguy.nfs
+
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section data-background-video="media/videos/k9s-intro.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h1>Installing Kubernetes</h1>
+							<p>Installing and configuring k8s cluster using k3s</p>
+						</div>
+					</section>
+					<section data-background-video="media/videos/k9s-intro.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Picking right distribution</h3>
+							<ul>
+								<li>Red Hat OpenShift</li>
+								<li>Rancher</li>
+								<li>Apache Mesosphere</li>
+								<li>CoreOS Tectonic</li>
+								<li>Telekube</li>
+								<li>Heptio</li>
+								<li>Kind</li>
+								<li>Microk8s</li>
+							</ul>
+						</div>
+					</section>
+					<section data-background-iframe="https://k3s.io/" data-background-interactive>
+						<div style="position: absolute; width: 50%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: center;">
+							<h2>K3S</h2>
+							<blockquote cite="https://rancher.com/docs/k3s/latest/en/architecture/">
+								&ldquo;Lightweight Kubernetes. Easy to install, half the memory, all in a binary of less than 50mb.&rdquo;
+							</blockquote>
+						</div>
+					</section>
+					<section>
+						<h2>Architecture</h2>
+						<p>High-Availability K3s Server with an External DB</p>
+						<img src="media/images/k3s-architecture-ha-server.png" alt="k3s ha architecture">
+
+						<aside class="notes">
+							<iframe src="https://rancher.com/docs/k3s/latest/en/installation/datastore/" frameborder="0" width="100%" height="650px"></iframe>
+						</aside>
+					</section>
+					<section>
+						<h3>Picking external database</h3>
+						<ul>
+							<li>Embedded SQLite - default</li>
+							<li class="fragment grow highlight-green">PostgreSQL</li>
+							<li>MySQL</li>
+							<li>MariaDB</li>
+							<li>etcd - default choice for k8s</li>
+							<li class="fragment grow highlight-blue">Embedded DQLite for High Availability (experimental)</li>
+						</ul>
+
+						<aside class="notes">
+							<iframe src="https://rancher.com/docs/k3s/latest/en/installation/datastore/" frameborder="0" width="100%" height="650px"></iframe>
+						</aside>
+					</section>
+					<section>
+						<h3>Automating process</h3>
+						<pre><code class="yaml" data-line-numbers="0">---
+- hosts: k3s_rpi_master
+  remote_user: "{{ username }}"
+  become: true
+  gather_facts: true
+
+  tasks:
+    - set_fact:
+        db_password: "{{ lookup('password', 'postgres-password chars=ascii_letters length=30') }}"
+      with_items: "{{ groups['database_rpi_master'][0] }}"
+    - name: Install k3s on master node
+      shell: "curl -sfL https://get.k3s.io | sh -s - --no-deploy servicelb --no-deploy traefik --datastore-endpoint=\"postgres..."
+      with_items: "{{ groups['database_rpi_master'][0] }}"
+    - name: Get token from master
+      shell: "cat /var/lib/rancher/k3s/server/node-token"
+      register: k3s_node_token
+    - name: Wait for k3s server to run
+      wait_for:
+        port: 6443
+        delay: 10
+    - name: Verify k3s master installation
+      shell: k3s kubectl get node
+
+- hosts: k3s_rpi_worker
+  remote_user: "{{ username }}"
+  become: true
+  gather_facts: true
+
+  tasks:
+    - set_fact:
+        k3s_master_host: "{{ groups['k3s_rpi_master'][0] }}"
+    - set_fact:
+        k3s_master_token: "{{ hostvars[k3s_master_host]['k3s_node_token'].stdout }}"
+    - name: Check if k3s is already installed
+      shell: k3s -v
+      register: is_k3s_running
+      ignore_errors: true
+    - name: Install k3s on worker nodes and connect to master
+      shell: "curl -sfL https://get.k3s.io | K3S_URL=https://{{ hostvars[k3s_master_host]['ansible_host'] }}:6443 K3S_TOKEN={{ k3s_master_token }} sh -"
+      when: is_k3s_running is failed
+    - name: Verify k3s installation
+      shell: k3s -v
+
+						</code></pre>
+					</section>
+				</section>
+				<section data-background-video="media/videos/grafana-login.mp4" data-background-video-loop="loop">
+					<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+						<h1>Building perfect system</h1>
+					</div>
+				</section>
+				<section>
+					<section data-background-image="media/images/cronjob.png">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h2>Cluster backups</h2>
+						</div>
+					</section>
+					<section>
+						<pre><code class="yaml" data-line-numbers="0">---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cluster-backup
+  labels:
+    database: postgres
+  namespace: cluster-backup
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          hostNetwork: true
+          containers:
+          - name: cluster-backup
+            image: tetrash/postgres-gcs-backup
+            env:
+            - name: GCS_KEY_FILE_PATH
+              value: "/etc/gcp/gcp-key.yaml"
+          restartPolicy: OnFailure
+          volumes:
+          - name: gcp
+            secret:
+              secretName: gcp-key.yaml
+
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section data-background-image="media/images/grafana-dashboards.png">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h1>Cluster monitoring</h1>
+						</div>
+					</section>
+					<section>
+						<h3>Kubernetes default logs</h3>
+						<img src="media/images/k8s-logs.png" alt="">
+					</section>
+					<section>
+						<h3>Alternatives for k8s logs</h3>
+						<img src="media/images/elastisearch-logo.png" alt="" style="height: 160px">
+						<img class="fragment grow" src="media/images/influxdb-logo.png" alt="" style="height: 160px">
+					</section>
+					<section>
+						<h3>Influxdb + telegraf</h3>
+						<img src="media/images/telegraf.png" alt="">
+					</section>
+					<section>
+						<h3>Influxdb - docker images</h3>
+						<img src="media/images/influxdb-images.png" alt="" style="height: 450px">
+					</section>
+					<section data-background-image="media/images/prometheus-operator-pods.png">
+						<div style="background-color: rgba(0, 0, 0, 0.95); color: #fff; padding: 20px;">
+							<h3>Prometheus-operator</h3>
+							<blockquote>"The Prometheus Operator makes the Prometheus configuration Kubernetes native and manages and operates Prometheus and Alertmanager clusters. It is a piece of the puzzle regarding full end-to-end monitoring."</blockquote>
+						</div>
+
+						<aside class="notes">
+							<p>Once installed, the Prometheus Operator provides the following features:</p>
+							<ul>
+								<li>Create/Destroy: Easily launch a Prometheus instance for your Kubernetes namespace, a specific application or team easily using the Operator.</li>
+								<li>Simple Configuration: Configure the fundamentals of Prometheus like versions, persistence, retention policies, and replicas from a native Kubernetes resource.</li>
+								<li>Target Services via Labels: Automatically generate monitoring target configurations based on familiar Kubernetes label queries; no need to learn a Prometheus specific configuration language.</li>
+							</ul>
+						</aside>
+					</section>
+
+					<section>
+						<div style="text-align: left; padding-left: 20%">
+							<p>Prometheus-operator CRDs</p>
+							<ul>
+								<li>Prometheus</li>
+								<li>ServiceMonitor</li>
+								<li>PodMonitor</li>
+								<li>PrometheusRule</li>
+								<li>Alertmanager</li>
+							</ul>
+							<p>* CRD = custom resource definition</p>
+
+							<aside class="notes">
+								<ul>
+									<li>Prometheus, which defines a desired Prometheus deployment. The Operator ensures at all times that a deployment matching the resource definition is running.</li>
+									<li>ServiceMonitor, which declaratively specifies how groups of services should be monitored. The Operator automatically generates Prometheus scrape configuration based on the definition.</li>
+									<li>PodMonitor, which declaratively specifies how groups of pods should be monitored. The Operator automatically generates Prometheus scrape configuration based on the definition.</li>
+									<li>PrometheusRule, which defines a desired Prometheus rule file, which can be loaded by a Prometheus instance containing Prometheus alerting and recording rules.</li>
+									<li>Alertmanager, which defines a desired Alertmanager deployment. The Operator ensures at all times that a deployment matching the resource definition is running.</li>
+								</ul>
+
+							</aside>
+						</div>
+					</section>
+
+					<section>
+						<p>Example prometheus deployment</p>
+						<pre><code class="yaml" data-line-numbers="0">---
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  labels:
+    app: prometheus-operator-prometheus
+  name: prometheus-operator-prometheus
+  namespace: prometheus-operator
+spec:
+  additionalScrapeConfigs:
+    key: prometheus-arm-exporter.yaml
+    name: arm-exporter-scrape-configs
+  alerting:
+    alertmanagers:
+    - apiVersion: v2
+      name: prometheus-operator-alertmanager
+      namespace: prometheus-operator
+      pathPrefix: /
+      port: web
+  baseImage: prom/prometheus
+  enableAdminAPI: false
+  externalUrl: http://prometheus-operator-prometheus.prometheus-operator:9090
+  listenLocal: false
+  logFormat: logfmt
+  logLevel: info
+  paused: false
+  podMonitorNamespaceSelector: {}
+  podMonitorSelector:
+    matchLabels:
+      release: prometheus-operator
+  portName: web
+  replicas: 1
+  retention: 10d
+  routePrefix: /
+  ruleNamespaceSelector: {}
+  ruleSelector:
+    matchLabels:
+      app: prometheus-operator
+      release: prometheus-operator
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+  serviceAccountName: prometheus-operator-prometheus
+  serviceMonitorSelector:
+    matchLabels:
+      release: prometheus-operator
+
+						</code></pre>
+					</section>
+					<section>
+						<h3>Grafana (result)</h3>
+						<img src="media/images/grafana-dashboards.png" alt="">
+					</section>
+					<section>
+						<h3>Service mesh - linkerd</h3>
+						<img src="media/images/linkerd.png" alt="">
+
+						<aside class="notes">
+							<iframe src="https://linkerd.io/2/features/protocol-detection/" frameborder="0" width="100%" height="650px"></iframe>
+						</aside>
+					</section>
+					<section>
+						<h3>Linkerd - grafana dashboards</h3>
+						<img src="media/images/linkerd-grafana.png" alt="">
+					</section>
+				</section>
+				<section>
+					<section data-background-video="media/videos/grafana-login.mp4" data-background-video-loop="loop">
+						<div style="background-color: rgba(0, 0, 0, 0.95); color: #fff; padding: 20px;">
+							<h3>Kubernetes authentication | authorization | rbac | sso | securing apps</h3>
+						</div>
+					</section>
+					<section>
+						<h3>oauth2-proxy</h3>
+
+						<img src="media/images/outh2-proxy-architecture.png" height="373" width="584"/>
+
+						<aside class="notes">
+							A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
+						</aside>
+					</section>
+					<section>
+						<h3>Securing apps with oauth2-proxy</h3>
+						<pre><code class="yaml" data-line-numbers="0">---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: oauth2-proxy
+    spec:
+      containers:
+      - args:
+        - --provider=github
+        - --email-domain=*
+        - --upstream=file:///dev/null
+        - --http-address=0.0.0.0:4180
+        # Register a new application
+        # https://github.com/settings/applications/new
+        env:
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: Client ID
+        - name: OAUTH2_PROXY_CLIENT_SECRET
+          value: Client Secret
+        # docker run -ti --rm python:3-alpine python -c 'import secrets,base64; print(base64.b64encode(base64.b64encode(secrets.token_bytes(16))));'
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          value: SECRET
+        image: quay.io/pusher/oauth2_proxy:latest
+        imagePullPolicy: Always
+        name: oauth2-proxy
+        ports:
+        - containerPort: 4180
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+  namespace: kube-system
+spec:
+  ports:
+  - name: http
+    port: 4180
+    protocol: TCP
+    targetPort: 4180
+  selector:
+    k8s-app: oauth2-proxy
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+  name: external-auth-oauth2
+  namespace: kube-system
+spec:
+  rules:
+  - host: __INGRESS_HOST__
+    http:
+      paths:
+      - backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 80
+        path: /
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: oauth2-proxy
+  namespace: kube-system
+spec:
+  rules:
+  - host: __INGRESS_HOST__
+    http:
+      paths:
+      - backend:
+          serviceName: oauth2-proxy
+          servicePort: 4180
+        path: /oauth2
+  tls:
+  - hosts:
+    - __INGRESS_HOST__
+    secretName: __INGRESS_SECRET__
+
+						</code></pre>
+					</section>
+					<section>
+						<h3>Authentication strategies</h3>
+
+						<ul>
+							<li>X509 Client Certs</li>
+							<li>Bootstrap Tokens</li>
+							<li>Static Password File</li>
+							<li>Service Account Tokens</li>
+							<li>OpenID Connect Tokens</li>
+							<li>Webhook Token Authentication</li>
+							<li>Authenticating Proxy</li>
+						</ul>
+
+						<aside class="notes">
+							<iframe src="https://kubernetes.io/docs/reference/access-authn-authz/authentication/" frameborder="0" width="100%" height="650px"></iframe>
+						</aside>
+					</section>
+					<section>
+						<h3>Dex - identity provider</h3>
+						<img src="media/images/dex.png" />
+
+						<aside class="notes">
+							<p>Dex is an identity service that uses OpenID Connect to drive authentication for other apps.</p>
+							<p>Dex acts as a portal to other identity providers through "connectors." This lets dex defer authentication to LDAP servers, SAML providers, or established identity providers like GitHub, Google, and Active Directory. Clients write their authentication logic once to talk to dex, then dex handles the protocols for a given backend.</p>
+						</aside>
+					</section>
+					<section data-background-image="media/images/dex.png">
+						<div style="right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 30px; text-align: center;">
+							<blockquote cite="https://github.com/dexidp/dex">
+								&ldquo;Dex's main production use is as an auth-N addon in CoreOS's enterprise Kubernetes solution, Tectonic. Dex runs natively on top of any Kubernetes cluster using Third Party Resources and can drive API server authentication through the OpenID Connect plugin. Clients, such as the Tectonic Console and kubectl, can act on behalf users who can login to the cluster through any identity provider dex supports.&rdquo;
+							</blockquote>
+						</div>
+					</section>
+					<section>
+						<h3>RBAC with dex</h3>
+						<pre><code class="yaml">---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admins
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admin
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: szyma.karol@gmail.com
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: red-team
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-read-all
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: kube-rpi:red
+						</code></pre>
+					</section>
+					<section>
+						<h3>Result: Easier users management</h3>
+						<img src="media/images/github-teams.png"/>
+					</section>
+					<section data-background-image="media/images/gangway.png">
+						<div style="background-color: rgba(0, 0, 0, 0.95); color: #fff; padding: 20px;">
+							<h2>Gangway</h2>
+							<blockquote>Gangway allows users to self-configure their kubectl configuration in a few short steps.</blockquote>
+						</div>
+
+						<aside class="notes">An application that can be used to easily enable authentication flows via OIDC for a kubernetes cluster. Kubernetes supports OpenID Connect Tokens as a way to identify users who access the cluster.</aside>
+					</section>
+
+					<section>
+						<img src="media/images/gangway-logged.png" alt="" height="650px">
+					</section>
+				</section>
+				<section>
+					<section data-background-image="media/images/mutli-arch-images.png">
+						<div style="background-color: rgba(0, 0, 0, 0.95); color: #fff; padding: 20px;">
+							<h2>Building docker images for arm architecture</h2>
+						</div>
+					</section>
+					<section>
+						<h3>Multiarch images</h3>
+						<img src="media/images/mutli-arch-images.png" style="height: 450px"/>
+					</section>
+					<section>
+						<h3>Buildx overview</h3>
+						<blockquote>"It provides the same user experience as docker build with many new features like creating scoped builder instances and building against multiple nodes concurrently."</blockquote>
+					</section>
+					<section>
+						<h3>Buildx - experimental feature</h3>
+						<pre><code class="shell-session">$ docker buildx build \
+>    --progress plain \
+>    --platform=linux/amd64,linux/arm64,linux/arm/v7 \
+>    -t myname/myapp:latest \
+>    --push .
+						</code></pre>
+					</section>
+					<section>
+						<h3>Alternative method - do it manually</h3>
+						<pre><code class="shell-session">
+$ GOOS=linux GOARCH=$ARCH CGO_ENABLED=0 go build -mod=vendor -ldflags="-s -X github.com/coreos/prometheus-operator/pkg/version.Version=$VERSION" -o operator ./cmd/operator/main.go
+$ docker build -t docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION-$ARCH --build-arg ARCH=armv7 --build-arg OS=linux .
+$ docker build -t docker.io/rmb938/prometheus-config-reloader-multi-arch:$GIT_VERSION-$ARCH --build-arg ARCH=$ARCH --build-arg OS=linux -f cmd/prometheus-config-reloader/Dockerfile .
+
+$ DOCKER_CLI_EXPERIMENTAL=enabled docker manifest create -a "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION" "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION-amd64" "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION-arm" "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION-arm64"
+$ DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION" "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION-arm"
+$ DOCKER_CLI_EXPERIMENTAL=enabled docker manifest annotate --arch arm64 "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION" "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION-arm64"
+$ DOCKER_CLI_EXPERIMENTAL=enabled docker manifest push "docker.io/rmb938/prometheus-operator-multi-arch:$GIT_VERSION"
+						</code></pre>
+					</section>
+				</section>
+				<section>
+					<section data-background-video="media/videos/raspberry-pi-sample-1.mp4" data-background-video-loop="true">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h1>Summary</h1>
+						</div>
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-1.mp4" data-background-video-loop="true">
+						<img src="media/images/rpi-cluster-with-touchscreen.jpeg" height="400px"/>
+					</section>
+					<section data-background-iframe="https://kubeedge.io/en/" data-background-interactive="true"></section>
+					<section data-background-video="media/videos/raspberry-pi-sample-1.mp4" data-background-video-loop="true">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Questions</h3>
+						</div>
+					</section>
+					<section data-background-video="media/videos/raspberry-pi-sample-1.mp4" data-background-video-loop="true">
+						<div style="background-color: rgba(0, 0, 0, 0.8); color: #fff; padding: 20px;">
+							<h3>Thank you for your attention!</h3>
+						</div>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				hash: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/highlight/highlight.js' },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
